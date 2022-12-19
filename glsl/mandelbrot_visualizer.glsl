@@ -6,7 +6,7 @@ uniform float uTime;
 const float zoom = 200;
 const float yTrans = 0.25;
 const float xTrans = -0.9024;
-const uint iterAmt = 100000u;
+const uint iterAmt = 1000u;
 
 const uint colorAmt = 10u;
 const vec3[colorAmt] colors = vec3[](
@@ -19,7 +19,7 @@ const vec3[colorAmt] colors = vec3[](
 	vec3(0.012,0.988,0.059),
 	vec3(0.012,0.988,0.533),
 	vec3(0.012,0.988,0.776),
-	vec3(0.012,0.012,0.012)
+	vec3(0.012,0.663,0.988)
 );
 
 void main()
@@ -55,7 +55,8 @@ void main()
     	z = res;
     }
     
-    uint colorIdx = count == iterAmt ? colorAmt-1u : uint(mod(count, colorAmt));
-    vec3 color = colors[colorIdx];
+    vec3 color = count == iterAmt 
+    	? vec3(0.012)
+    	: colors[uint(mod(count, colorAmt))];
     gl_FragColor = vec4(color, 1.0);
 }
