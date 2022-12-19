@@ -3,10 +3,13 @@
 uniform vec2 uResolution;
 uniform float uTime;
 
-const float zoom = 200;
-const float yTrans = 0.3;
-const float xTrans = -0.7;
-const int iterAmt = 50;
+const float zoom = 100;
+const float yTrans = 0.1;
+const float xTrans = -0.767;
+
+const int iterAmt = 12;
+const vec3 color1 = vec3(0.149,0.141,0.912);
+const vec3 color2 = vec3(1.000,0.833,0.224);
 
 void main()
 {	
@@ -41,6 +44,6 @@ void main()
     	z = res;
     }
     
-    float color = count / iterAmt;
-    gl_FragColor = vec4(color, 0, 0, 1.0);
+    vec3 color = mix(color1, color2, count / iterAmt);
+    gl_FragColor = vec4(color, 1.0);
 }
