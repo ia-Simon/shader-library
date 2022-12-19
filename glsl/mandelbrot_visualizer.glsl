@@ -3,13 +3,24 @@
 uniform vec2 uResolution;
 uniform float uTime;
 
-const float zoom = 100;
-const float yTrans = 0.1;
-const float xTrans = -0.767;
+const float zoom = 200;
+const float yTrans = 0.25;
+const float xTrans = -0.9024;
+const uint iterAmt = 100000u;
 
-const int iterAmt = 12;
-const vec3 color1 = vec3(0.149,0.141,0.912);
-const vec3 color2 = vec3(1.000,0.833,0.224);
+const uint colorAmt = 10u;
+const vec3[colorAmt] colors = vec3[](
+	vec3(0.988,0.012,0.012),
+	vec3(0.988,0.435,0.012),
+	vec3(0.988,0.694,0.012),
+	vec3(0.988,0.941,0.012),
+	vec3(0.694,0.988,0.012),
+	vec3(0.482,0.988,0.012),
+	vec3(0.012,0.988,0.059),
+	vec3(0.012,0.988,0.533),
+	vec3(0.012,0.988,0.776),
+	vec3(0.012,0.012,0.012)
+);
 
 void main()
 {	
@@ -27,14 +38,14 @@ void main()
   		|| normFragCoord == vec2(-1,0)
   		|| normFragCoord == vec2(-2,0)
   	) {
-    	gl_FragColor = vec4(1.0);
+    	gl_FragColor = vec4(0.2, 0.2, 1.0, 1.0);
     	return;
     }
    
     vec2 c = (normFragCoord / zoom) + vec2(xTrans, yTrans);
     vec2 z = vec2(0);
-    int count;
-    for(count = 0; count < iterAmt; count++) {
+    uint count;
+    for(count = 0u; count < iterAmt; count++) {
     	vec2 zSq = vec2(pow(z.x, 2.) + (pow(z.y, 2.)*-1), 2*z.x*z.y);
     
     	vec2 res = zSq + c;
@@ -44,6 +55,7 @@ void main()
     	z = res;
     }
     
-    vec3 color = mix(color1, color2, count / iterAmt);
+    uint colorIdx = count == iterAmt ? colorAmt-1u : uint(mod(count, colorAmt));
+    vec3 color = colors[colorIdx];
     gl_FragColor = vec4(color, 1.0);
 }
